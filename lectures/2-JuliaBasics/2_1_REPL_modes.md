@@ -13,7 +13,7 @@ Julia 有几个主要的工作模式：
 | Pkg 模式 | Julia 装包时使用的模式 | 在 Julian 模式下按 `]` 进入 |
 | Help 文档模式 | 查询文档时使用 | 在 Julian 模式下按 `?` 进入 |
 | Shell 模式 | 切换到系统命令行 | 在 Julian 模式下按 `;` 进入 |
-| Debug 模式 ｜ 进入到代码调试模式 | 安装 Debugger.jl 后使用 ｜
+| Debug 模式 | 进入到代码调试模式 | 安装 Debugger.jl 后使用 |
 
 ## Julian 模式
 
