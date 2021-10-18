@@ -26,6 +26,10 @@
 - (12.5) 自动微分： 深度学习的核心组件
 - (12.12) 待定
 
+## 其他
+
+- 致宏关于这些内容自己整理了一系列的笔记，有兴趣的话可以查看 [Rex's blog](https://www.wzhecnu.xyz/tags/Julia/) （2021年）
+
 <!-- urls -->
 
 [cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh
