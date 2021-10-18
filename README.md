@@ -28,7 +28,7 @@
 
 ## 其他
 
-- 致宏关于这些内容自己整理了一系列的笔记，有兴趣的话可以查看 [https://www.wzhecnu.xyz/tags/Julia/](Rex's blog) （2021年）
+- 致宏关于这些内容自己整理了一系列的笔记，有兴趣的话可以查看 [Rex's blog](https://www.wzhecnu.xyz/tags/Julia/) （2021年）
 
 <!-- urls -->
 
