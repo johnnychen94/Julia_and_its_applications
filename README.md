@@ -10,6 +10,8 @@
 
 如果关于材料的内容有疑问， 欢迎[开issue](https://github.com/johnnychen94/Julia_and_its_applications/issues/new)提问.
 
+配置 Julia 请查看 [setup](setup.md)
+
 ## 时间及内容安排
 
 **时间：** 2021年10月10日 - 2021年12月12日， 每周日下午 14:00 - 16:00
@@ -34,6 +36,7 @@
 
 ## 其他
 
+- 原始仓库放在 [GitHub](https://github.com/johnnychen94/Julia_and_its_applications) 上面， 考虑到一些同学缺乏一些必要的技术手段， 在国内也镜像到 [Gitee](https://gitee.com/JohnnyChen94/julia_and_its_application)了。
 - 致宏关于这些内容自己整理了一系列的笔记，有兴趣的话可以查看 [Rex's blog](https://www.wzhecnu.xyz/tags/Julia/) （2021年）
 
 <!-- urls -->
