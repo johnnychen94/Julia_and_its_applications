@@ -10,7 +10,7 @@
 
 如果关于材料的内容有疑问， 欢迎[开issue](https://github.com/johnnychen94/Julia_and_its_applications/issues/new)提问.
 
-配置 Julia 请查看 [setup](setup.md)
+配置 Julia 请查看 [setup](setup.md)
 
 ## 时间及内容安排
 
