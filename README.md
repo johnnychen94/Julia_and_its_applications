@@ -25,10 +25,11 @@
 - （第一讲 10.10）： Julia 概述： 这是⼀⻔什么样的语⾔， 为什么要有这⻔语⾔， 以及当前的⽣态
 - （第二讲 10.17）： Julia 的基本数据类型以及函数的定义
 - （第三讲 10.24）： Julia 的类型系统和多重派发 （补充材料： 利用 functor 模式打造一个简单的深度学习方案）
+- （第四讲 10.31）: [广播与向量化编程][4_1_broadcasting] （顺便演示了 [Julia-VSCode] 还有 [Revise.jl]）
 
 待定：
 
-- (10.31) Julia 的典型工作流、 模块、 矩阵、 广播
+- (11.7) 矩阵和迭代器接口， 并行计算简介
 - (11.7， 11.14) CPU 并⾏计算： CPU 硬件模型、 SIMD、 多线程与异步模型、 多进程
 - (11.21， 11.28) GPU 并⾏计算： GPU 硬件模型及 CUDA
 - (12.5) 自动微分： 深度学习的核心组件
@@ -41,5 +42,8 @@
 
 <!-- urls -->
 
+[4_1_broadcasting]: https://johnnychen94.github.io/Julia_and_its_applications/4_1_broadcasting.jl.html
+[Julia-VSCode]: https://www.julia-vscode.org/
+[Revise.jl]: https://github.com/timholy/Revise.jl
 [cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh
 [cc-by-nc-sa-image]: https://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-sa.svg
