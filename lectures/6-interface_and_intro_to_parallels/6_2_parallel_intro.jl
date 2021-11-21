@@ -149,7 +149,7 @@ end
 md"""
 ### 任务模型
 
-`@sync` 与 `@async` 提供的是一套比较方便的 API， 它们的底层由由任务 (Task) 以及任务池 (TaskPool) 的概念组成。 下面介绍的是更底层的基于 Task 的 API：
+`@sync` 与 `@async` 提供的是一套比较方便的 API， 它们的底层由由任务 (Task) 以及任务池 (task pool) 的概念组成。 下面介绍的是稍微底层一些的基于 Task 的 API. （当然更底层的话， Task 是基于 `yieldto` API 实现的， 不过大部分时候我们并不需要使用到它。）
 """
 
 # ╔═╡ 0ba174f2-7c78-4bde-a263-c209012b289d
@@ -256,11 +256,6 @@ function do_cpu_task(i)
 	rand(1024, 1024) * rand(1024, 2048) # takes about 0.1s
 end
 
-# ╔═╡ e624100f-27c1-4a8b-aea1-04df222d5022
-md"""
-通过 `JULIA_NUM_THREADS` 环境变量来指定有多少个线程可以同时工作
-"""
-
 # ╔═╡ 56a06db8-a9e3-4d94-860f-b94739e0358a
 with_terminal() do
 	@time begin
@@ -272,7 +267,7 @@ end
 
 # ╔═╡ 408ad69c-670e-4e37-a152-6f44b3f7eb05
 md"""
-多线程也可以直接使用对应的底层 Task 模型来实现： 与单线程异步模型中唯一有差别是将任务分配到不同线程的调度池。
+多线程也可以直接使用对应的底层 Task 模型来实现： 与单线程异步模型中唯一有差别是将任务分配空余的线程上。
 """
 
 # ╔═╡ 3f2a4597-fbaa-49ff-ab46-ca62f298ae72
@@ -295,7 +290,7 @@ md"""
 **多线程异步模型**：
 
 !!! note "`@spawn` 与 `@async`"
-	`Threads.@spawn` 会将创建好的任务分配到空闲的线程(Thread)上， 而 `@async` 则是分配到空余的协程(coroutine)上。 简单来说， 协程是在系统内核态进程上由 Julia （或其他用户程序） 创建的用户态进程， 它提供了上下文切换的异步功能（concurrency）， 但是并不能调用 CPU 的多核资源 （因为这些协程实际上共享同一个系统线程）。
+	`Threads.@spawn` 会将创建好的任务分配到空闲的线程(Thread)上， 而 `@async` 则是分配到空余的协程(coroutine)上。 简单来说， 协程是由 Julia （或其他用户程序） 创建的用户态进程， 它提供了上下文切换的异步功能（concurrency）， 但是并不能调用 CPU 的多核资源 （因为这些协程实际上共享同一个系统线程）。
 """
 
 # ╔═╡ f2da005b-a6b4-42b1-820a-66f08842175d
@@ -344,7 +339,7 @@ $(Show(MIME"image/png"(), read("data_races.png")))
 
 # ╔═╡ 471121ab-9bbb-438e-8281-46d74877cce8
 md"""
-解决数据竞争的核心思路是避免同时写入， 操作起来有两个一般手段：
+解决数据竞争的核心思路是避免同时写入， 操作起来有两种一般手段：
 
 - 加锁
 - 避免数据共享
@@ -534,6 +529,8 @@ md"""
 ## 任务的分配
 
 每个子任务的计算规模可能是不同的， 简单的理想情况下会假设每个子任务的计算时间基本一致， 从而将任务均匀地分配到不同的线程上。 `Threads.@threads` 假设的是均匀任务， 对于不均匀任务来说， [ThreadPools](https://github.com/tro3/ThreadPools.jl) 提供了一些非常方便的调度器。
+
+实际上， 前面介绍的 `@sync`-`Threads.@spawn` 其实就挺好用的了。
 """
 
 # ╔═╡ eaba16eb-64d4-42dc-a260-c1507f7966d7
@@ -584,6 +581,8 @@ end
 # ╔═╡ 4a61fbbe-822c-453f-beb6-13c0a351cf21
 md"""
 假设下面是我们简单的数据处理流水线
+
+$(Show(MIME"image/png"(), read("naive_pipeline.png")))
 """
 
 # ╔═╡ edafe8d2-8abc-48f0-8ee5-49f3a4fcf137
@@ -642,6 +641,7 @@ md"""
 Channel 模型是一个很简单的优化这类流水线模型的一个思路: 流水线前一个阶段的所有输出全部丢进 Channel 中， 然后后一个阶段则从 Channel 中获取数据。 这样做的好处可以让每个阶段都保持繁忙。
 
 $(Show(MIME"image/png"(), read("channel_model.png")))
+
 """
 
 # ╔═╡ a5487257-2429-40d0-874e-48f7ca975feb
@@ -671,7 +671,7 @@ md"""
 
 # ╔═╡ e0778a69-878e-4f0e-8a04-13a03de9dde1
 function pipeline_channel_threads()
-	ch = Channel(4Threads.nthreads(); spawn=true) do ch
+	ch = Channel(Threads.nthreads(); spawn=true) do ch
 		@sync for i in 1:4Threads.nthreads()
 			Threads.@spawn put!(ch, load_data(i))
 		end
@@ -988,7 +988,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═95efe7ba-d78d-4d26-8023-8236a4d256d8
 # ╟─1ad22cc7-f697-4e47-8d9e-c282833f0dfc
 # ╠═991c4473-b224-4436-90c2-a37eab6bc66f
-# ╟─e624100f-27c1-4a8b-aea1-04df222d5022
 # ╠═56a06db8-a9e3-4d94-860f-b94739e0358a
 # ╟─408ad69c-670e-4e37-a152-6f44b3f7eb05
 # ╟─3f2a4597-fbaa-49ff-ab46-ca62f298ae72
