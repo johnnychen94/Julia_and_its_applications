@@ -26,10 +26,10 @@
 - （第二讲 10.17）： Julia 的基本数据类型以及函数的定义
 - （第三讲 10.24）： Julia 的类型系统和多重派发 （补充材料： 利用 functor 模式打造一个简单的深度学习方案）
 - （第四讲 10.31）: [广播与向量化编程][4_1_broadcasting] （顺便演示了 [Julia-VSCode] 还有 [Revise.jl]）
-- (第五讲 11.7): 一个简单的关于卷积的小练习([problems][workshop_problems] and [solution][workshop_solution])
+- （第五讲 11.7）: 一个简单的关于卷积的小练习（[problems][workshop_problems] and [solution][workshop_solution]）
   顺便还介绍了 Flux 下的 Conv 层的概念， 但由于过于繁忙（懒惰）一直没有把内容补上 （下次一定）
-- (第六讲 11.14): [矩阵与迭代器接口][6_1_interfaces]， [异步模型与多线程模型][6_2_parallel_intro]
-- (第七讲 11.21): 继续介绍 [异步与多线程模型][6_2_parallel_intro]， 以及多进程模型的内容 (暂时还没有整理完)。
+- （第六讲 11.14）: [矩阵与迭代器接口][6_1_interfaces]， [异步模型与多线程模型][6_2_parallel_intro]
+- （第七讲 11.21）: 继续介绍 [异步与多线程模型][6_2_parallel_intro]， 以及多进程模型的内容 (暂时还没有整理完)。
   顺便还介绍了一些关于元编程、 [LoopVectorization] 以及 [Halide][halide_scheduling] 的一些东西。
 
 待定：
