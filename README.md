@@ -26,14 +26,16 @@
 - （第二讲 10.17）： Julia 的基本数据类型以及函数的定义
 - （第三讲 10.24）： Julia 的类型系统和多重派发 （补充材料： 利用 functor 模式打造一个简单的深度学习方案）
 - （第四讲 10.31）: [广播与向量化编程][4_1_broadcasting] （顺便演示了 [Julia-VSCode] 还有 [Revise.jl]）
+- (第五讲 11.7): 一个简单的关于卷积的小练习, 以及顺便介绍了 Flux 下的 Conv 层， 但由于过于繁忙（懒惰）一直没有把后续内容补上 （下次一定）
+- (第六讲 11.14): [矩阵与迭代器接口][6_1_interfaces]， [异步模型与多线程模型][6_2_parallel_intro]
+- (第七讲 11.21): 继续介绍 [异步与多线程模型][6_2_parallel_intro]， 以及多进程模型的内容 (暂时还没有整理完)。
+  顺便还介绍了一些关于元编程、 [LoopVectorization] 以及 [Halide][halide_scheduling] 的一些东西。
 
 待定：
 
-- (11.7) 矩阵和迭代器接口， 并行计算简介
-- (11.7， 11.14) CPU 并⾏计算： CPU 硬件模型、 SIMD、 多线程与异步模型、 多进程
-- (11.21， 11.28) GPU 并⾏计算： GPU 硬件模型及 CUDA
-- (12.5) 自动微分： 深度学习的核心组件
-- (12.12) 待定
+- (11.28) GPU 并⾏计算： GPU 硬件模型及 CUDA
+- (12.5) ~~自动微分： 深度学习的核心组件~~ 实战： 从零开始写一个 Julia 包
+- (12.12) ~~待定~~ 咕咕咕 lè, 因为要搞 JuliaCN 冬季会议 https://discourse.juliacn.com/t/topic/5579
 
 ## 其他
 
@@ -43,6 +45,10 @@
 <!-- urls -->
 
 [4_1_broadcasting]: https://johnnychen94.github.io/Julia_and_its_applications/4_1_broadcasting.jl.html
+[6_1_interfaces]: https://johnnychen94.github.io/Julia_and_its_applications/6_1_interfaces.jl.html
+[6_2_parallel_intro]: https://johnnychen94.github.io/Julia_and_its_applications/6_2_parallel_intro.jl.html
+[LoopVectorization]: https://github.com/JuliaSIMD/LoopVectorization.jl
+[halide_scheduling]: https://halide-lang.org/tutorials/tutorial_lesson_05_scheduling_1.html
 [Julia-VSCode]: https://www.julia-vscode.org/
 [Revise.jl]: https://github.com/timholy/Revise.jl
 [cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh
