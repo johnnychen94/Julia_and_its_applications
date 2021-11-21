@@ -596,8 +596,9 @@ end
 
 # ╔═╡ 70087d8e-22a6-439e-83d0-13f3962ebe69
 function process_data(X)
+	Y = sum(@. abs(X*X*X - 0.5))
 	print(".")
-	sum(@. abs(X*X*X - 0.5))
+	return Y
 end
 
 # ╔═╡ 234767b7-cb09-484d-9b6a-dab740fceb74
@@ -664,16 +665,76 @@ md"""
 `Channel` 也接受函数形式的输入， 来构造一个类似于生成器的对象
 """
 
+# ╔═╡ d58b418a-553a-4f25-b304-3392568e4757
+with_terminal() do
+	ch = Channel() do ch
+		for i in 1:4
+			put!(ch, 2i)
+		end
+	end
+
+	for x in ch
+		@show x
+	end
+end
+
+# ╔═╡ dacc9631-3688-4e83-bac4-d2089a0d54be
+md"""
+存在两种极端情况：
+
+- 当管道中没有数据时， `take!` 会进入到等待模式， 直到下一个 `put!` 运算进来。
+- 当管道中缓存已经装满了数据时， `put!` 会进入到等待模式， 直到有一个 `take!` 操作试图获取数据。 默认情况下 `Channel()` 的缓存大小为 `0`， 即没有缓存。
+"""
+
+# ╔═╡ 248fb34c-36bc-4d96-81c2-3b04c216279e
+with_terminal() do
+	ch = Channel()
+	@async begin
+		sleep(0.2)
+		put!(ch, nothing)
+	end
+	# 因为 put! 延迟了 0.2s， 所以 take! 需要等待 0.2s 才能执行完
+	@time take!(ch)
+end
+
+# ╔═╡ e86e8016-3767-4a81-8375-911596bb12b6
+with_terminal() do
+	ch = Channel()
+	@async begin
+		sleep(0.2)
+		take!(ch)
+	end
+	# 因为 take! 延迟了 0.2s， 所以 put! 需要等待 0.2s 才能执行完
+	@time put!(ch, nothing)
+end
+
+# ╔═╡ facd655b-2f52-4de5-ac43-d5d934d2ca30
+md"""
+如果想要使用多线程的话， 那么就可以将 Channel 的生成函数构造成多线程的模式.
+"""
+
+# ╔═╡ 0bd918d4-b3aa-4da0-8017-96a0a6566544
+with_terminal() do
+	@time begin
+		ch = Channel(4) do ch
+			@sync for i in 1:8
+				Threads.@spawn put!(ch, do_cpu_task(i))
+			end
+		end
+		for x in ch end
+	end
+end
+
 # ╔═╡ c05d99b3-ff3d-42e7-978c-884c667fceaa
 md"""
-将前面的流水线例子用 `Channel` 重写一遍则是:
+现在将前面的流水线例子用 `Channel` 重写一遍则是:
 """
 
 # ╔═╡ e0778a69-878e-4f0e-8a04-13a03de9dde1
 function pipeline_channel_threads()
-	ch = Channel(Threads.nthreads(); spawn=true) do ch
+	ch = Channel(Threads.nthreads()) do ch
 		@sync for i in 1:4Threads.nthreads()
-			Threads.@spawn put!(ch, load_data(i))
+			@async put!(ch, load_data(i))
 		end
 	end
 
@@ -705,6 +766,34 @@ md"""
 	这个加速策略的有效性是有前提的， 即流水线的不同环节不存在资源的抢占： 包括计算资源（CPU、GPU、内存） 以及 IO 资源（磁盘、 网络）。
 
 	我们这里构造的例子中， 第一阶段主要涉及的是异步 IO 操作， 而第二个阶段主要是 CPU 计算， 因此每个阶段都可以保持繁忙的计算， 并且不会因为资源抢占导致效率降低。
+"""
+
+# ╔═╡ e8206fd6-faed-4128-ba80-c557687e43cf
+md"""
+除了上面提到的基于生成函数的 Channel 用法以外， 实际上也可以直接从多个线程中手动 `put!`
+"""
+
+# ╔═╡ e1cda401-d419-4055-a269-ce8b174c5b90
+with_terminal() do
+	ch = Channel(4)
+
+	@async for x in ch
+		sleep(0.01)
+	end
+
+	@time begin
+		Threads.@threads for t in 1:10
+			put!(ch, do_cpu_task(t))
+		end
+	end
+end
+
+# ╔═╡ 80ba49f3-6299-437f-aa97-41bcc32d7b4c
+md"""
+!!! warning "多线程并不必然会使代码变得更快"
+	多线程的内存数据是共享的， 因此如果子任务涉及到大量内存开销时， GC 操作会将全部线程都暂停。 在这种情况下， 多进程的模式因为每个进程的内存是互相独立的， 受到 GC 的影响会更小一些。
+	
+	在使用多线程策略之前， 首先需要确保在单线程上没有什么可疑的性能问题， 例如： 类型不稳定、 不必要的内存开销， 等等。 否则的话加上多线程很可能代码会变得更慢。
 """
 
 # ╔═╡ d3c288ce-800f-416e-a5a0-dc15cffca992
@@ -1032,10 +1121,19 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─a5487257-2429-40d0-874e-48f7ca975feb
 # ╠═30644964-3f9a-4a9e-be9c-056e3c65f235
 # ╟─be2a82e1-eca7-4911-b52c-cde5b624432b
+# ╠═d58b418a-553a-4f25-b304-3392568e4757
+# ╟─dacc9631-3688-4e83-bac4-d2089a0d54be
+# ╠═248fb34c-36bc-4d96-81c2-3b04c216279e
+# ╠═e86e8016-3767-4a81-8375-911596bb12b6
+# ╟─facd655b-2f52-4de5-ac43-d5d934d2ca30
+# ╠═0bd918d4-b3aa-4da0-8017-96a0a6566544
 # ╟─c05d99b3-ff3d-42e7-978c-884c667fceaa
 # ╠═e0778a69-878e-4f0e-8a04-13a03de9dde1
 # ╠═ff93f1bc-cba9-4252-a527-d12c865631c6
 # ╟─3e5b8adf-4421-4d3e-8bfd-e6495dc40dc7
+# ╟─e8206fd6-faed-4128-ba80-c557687e43cf
+# ╟─e1cda401-d419-4055-a269-ce8b174c5b90
+# ╟─80ba49f3-6299-437f-aa97-41bcc32d7b4c
 # ╟─d3c288ce-800f-416e-a5a0-dc15cffca992
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
