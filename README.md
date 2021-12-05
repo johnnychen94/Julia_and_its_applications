@@ -2,6 +2,10 @@
 
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
 
+> 今年的内容到此已经结束了， 后续应该不会再有更新。
+> 
+> 如果时间安排顺利的话， 应该会基于这些内容在 22 年春夏的时候准备一些更正式的材料 （小册子或者视频教程） 发布出来， 如果你觉得这些材料对你或者周围人有帮助的话请点个 star (这样的话我就有动力发电了)
+
 这是我在华东师范大学内部做的一个关于 Julia 的系列讲座时用到的材料， 主要目的是
 
 - 介绍 Julia 这门语言
@@ -31,12 +35,8 @@
 - （第六讲 11.14）: [矩阵与迭代器接口][6_1_interfaces]， [异步模型与多线程模型][6_2_parallel_intro]
 - （第七讲 11.21）: 继续介绍 [异步与多线程模型][6_2_parallel_intro]， 以及多进程模型的内容 (暂时还没有整理完)。
   顺便还介绍了一些关于元编程、 [LoopVectorization] 以及 [Halide][halide_scheduling] 的一些东西。
-
-待定：
-
-- (11.28) GPU 并⾏计算： GPU 硬件模型及 CUDA
-- (12.5) ~~自动微分： 深度学习的核心组件~~ 实战： 从零开始写一个 Julia 包
-- (12.12) ~~待定~~ 咕咕咕 lè, 因为要搞 JuliaCN 冬季会议 https://discourse.juliacn.com/t/topic/5579
+- （第八讲 12.5）： [从零开始写一个 Julia 包][8_package_workflow]： `Manifest.toml`/`Project.toml`, 包
+  注册表， 单元测试及CI， 性能测试， 文档构建
 
 ## 其他
 
@@ -50,6 +50,7 @@
 [workshop_problems]: https://johnnychen94.github.io/Julia_and_its_applications/5_1_workshop_problems.jl.html
 [workshop_solution]: https://johnnychen94.github.io/Julia_and_its_applications/5_1_workshop_solution.jl.html
 [6_2_parallel_intro]: https://johnnychen94.github.io/Julia_and_its_applications/6_2_parallel_intro.jl.html
+[8_package_workflow]: https://johnnychen94.github.io/Julia_and_its_applications/8_package_workflow.jl.html
 [LoopVectorization]: https://github.com/JuliaSIMD/LoopVectorization.jl
 [halide_scheduling]: https://halide-lang.org/tutorials/tutorial_lesson_05_scheduling_1.html
 [Julia-VSCode]: https://www.julia-vscode.org/
